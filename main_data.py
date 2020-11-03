@@ -12,6 +12,13 @@ def filter_data(constraint, lst):
     lst = list(filter(constraint, list(filter(string_filter, lst))))
     return lst
 
+def filter_data_2(constraint, lst):
+    string_filter = lambda string : False if string == "\n" else True
+    lst = list(filter(string_filter, lst))
+    print(lst)
+    lst = list(filter(constraint, lst))
+    return lst
+
 def details_about_DAIICT():
     with open('./About-DAIICT.txt', 'r') as ad:
         lines       = ad.readlines()
@@ -89,6 +96,9 @@ def emails(student_name_list, random_email_files, content):
 
 
 def emails_original(content):
+
+    content_l = content.copy()
+
     student_name_list = []
     with open('student_names_list.txt', 'r') as s:
         student_name_list = s.readlines()
@@ -104,9 +114,9 @@ def emails_original(content):
     ]
     
     ready_to_go = lambda string: True
-    content['environment']   = filter_data(ready_to_go, content['environment'])
-    content['recognition']   = filter_data(ready_to_go, content['recognition'])
-    content['accreditation'] = filter_data(ready_to_go, content['accreditation'])
+    content_l['environment']   = filter_data(ready_to_go, content_l['environment'])
+    content_l['recognition']   = filter_data(ready_to_go, content_l['recognition'])
+    content_l['accreditation'] = filter_data(ready_to_go, content_l['accreditation'])
 
     history_constraint = lambda string : True if (
             string.startswith('The first wave') or 
@@ -114,12 +124,16 @@ def emails_original(content):
             string.startswith('The third wave') or
             string.startswith('It was in the fourth wave')) else False
 
-    content['history'] = filter_data(history_constraint, content['history'])
-    emails(student_name_list, random_email_files, content)
+    content_l['history'] = filter_data(history_constraint, content_l['history'])
+    emails(student_name_list, random_email_files, content_l)
+
+    return random_email_files
 
 
-def emails_with_modifications(content):
-    files = list(filter(lambda string: True if string.startswith('email') else False, os.listdir())) 
+def emails_with_modifications(content, files):
+
+    content_l = content.copy()
+ 
     files = set(i for i in range(1,21)).difference(set(int(email.split('-')[1].split('.')[0]) for email in files))
 
     email_file_list = random.sample([f'email-{file}.txt' for file in files], 4)
@@ -127,9 +141,9 @@ def emails_with_modifications(content):
     student_name_list = ['name1@gmail.com', 'A_X_y@yahoo.co.in', 'nm123@rediff.com', 'nam_4_e@160.com']
 
     ready_to_go = lambda string: True
-    content['environment']   = filter_data(ready_to_go, content['environment'])
-    content['recognition']   = filter_data(ready_to_go, content['recognition'])
-    content['accreditation'] = filter_data(ready_to_go, content['accreditation'])
+    content_l['environment']   = filter_data(ready_to_go, content_l['environment'])
+    content_l['recognition']   = filter_data(ready_to_go, content_l['recognition'])
+    content_l['accreditation'] = filter_data(ready_to_go, content_l['accreditation'])
 
     history_constraint = lambda string : True if (
             string.startswith('The first wave') or 
@@ -137,10 +151,41 @@ def emails_with_modifications(content):
             string.startswith('The third wave') or
             string.startswith('It was in the fourth wave')) else False
 
-    content['history'] = filter_data(history_constraint, content['history'])
+    content_l['history'] = filter_data_2(history_constraint, content_l['history'])
 
-    emails(student_name_list, email_file_list, content)
+    emails(student_name_list, email_file_list, content_l)
+
+    return email_file_list
+
+def email_with_another_modifications(content, files):
+
+    content_l = content.copy()
+ 
+    files = set(i for i in range(1,21)).difference(set(int(email.split('-')[1].split('.')[0]) for email in files))
+
+    email_file_list = random.sample([f'email-{file}.txt' for file in files], 1)
+    
+    student_name_list = ['pc_503@daiict.ac.in']
+
+    ready_to_go = lambda string: True
+    content_l['environment']   = filter_data(ready_to_go, content_l['environment'])
+    content_l['recognition']   = filter_data(ready_to_go, content_l['recognition'])
+    content_l['accreditation'] = filter_data(ready_to_go, content_l['accreditation'])
+
+    history_constraint = lambda string : True if not (
+            string.startswith('The first wave') or 
+            string.startswith('The second wave') or 
+            string.startswith('The third wave') or
+            string.startswith('It was in the fourth wave')) else False
+
+    content_l['history'] = filter_data(history_constraint, content_l['history'])
+    print(content_l['history'])
+
+    emails(student_name_list, email_file_list, content_l)
+
 
 content = details_about_DAIICT()
-emails_original(content)
-emails_with_modifications(content)
+random_email_files = emails_original(content)
+random_email_files = emails_with_modifications(content, random_email_files) + random_email_files
+email_with_another_modifications(content, random_email_files)
+
