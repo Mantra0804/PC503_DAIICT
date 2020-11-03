@@ -12,13 +12,6 @@ def filter_data(constraint, lst):
     lst = list(filter(constraint, list(filter(string_filter, lst))))
     return lst
 
-def filter_data_2(constraint, lst):
-    string_filter = lambda string : False if string == "\n" else True
-    lst = list(filter(string_filter, lst))
-    print(lst)
-    lst = list(filter(constraint, lst))
-    return lst
-
 def details_about_DAIICT():
     with open('./About-DAIICT.txt', 'r') as ad:
         lines       = ad.readlines()
@@ -151,7 +144,7 @@ def emails_with_modifications(content, files):
             string.startswith('The third wave') or
             string.startswith('It was in the fourth wave')) else False
 
-    content_l['history'] = filter_data_2(history_constraint, content_l['history'])
+    content_l['history'] = filter_data(history_constraint, content_l['history'])
 
     emails(student_name_list, email_file_list, content_l)
 
@@ -179,9 +172,9 @@ def email_with_another_modifications(content, files):
             string.startswith('It was in the fourth wave')) else False
 
     content_l['history'] = filter_data(history_constraint, content_l['history'])
-    print(content_l['history'])
 
     emails(student_name_list, email_file_list, content_l)
+
 
 
 content = details_about_DAIICT()
