@@ -122,7 +122,7 @@ def emails_with_modifications(content):
     files = list(filter(lambda string: True if string.startswith('email') else False, os.listdir())) 
     files = set(i for i in range(1,21)).difference(set(int(email.split('-')[1].split('.')[0]) for email in files))
 
-    email_file_list = [f'email-{file}.txt' for file in files]
+    email_file_list = random.sample([f'email-{file}.txt' for file in files], 4)
     
     student_name_list = ['name1@gmail.com', 'A_X_y@yahoo.co.in', 'nm123@rediff.com', 'nam_4_e@160.com']
 
