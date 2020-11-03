@@ -45,12 +45,7 @@ def details_about_DAIICT():
         with open('Accreditation.txt', 'w') as a:
             a.writelines(lines[accredition['start']:])
 
-def emails():
-    student_name_list = []
-    with open('student_names_list.txt', 'r') as s:
-        student_name_list = s.readlines()
-
-    student_name_list = list(map(lambda string: string.replace("\n", ""), student_name_list))
+def emails(student_name_list, random_email_files):
 
     string_filter = lambda string : False if string == "\n" else True
 
@@ -78,9 +73,6 @@ def emails():
             string.startswith('It was in the fourth wave')
         ) else False, history))
 
-    random_email_files = [
-        f'email-{i}.txt' for i in random.sample(range(1, 21), 15)
-    ]
 
     for random_email_file in random_email_files:
         with open(random_email_file, 'w') as remail:
@@ -91,7 +83,7 @@ def emails():
             acc_s = random.choice(accreditation)
 
             remail.writelines([
-                    f'Recieved at 17:23 hrs on October 7, 2018 from {random.choice(student_name_list).replace(" ", "_")}@daiict.ac.in\n',
+                    f'Recieved at 17:23 hrs on October 7, 2018 from {random.choice(student_name_list)}\n',
                     '\n',
                     history_s,
                     env_s,
@@ -100,11 +92,33 @@ def emails():
                 ]
             )
 
+
+def emails_original():
+    student_name_list = []
+    with open('student_names_list.txt', 'r') as s:
+        student_name_list = s.readlines()
+
+    student_name_list = list(
+        map(
+            lambda string: string.replace("\n", "").replace(" ", "_") + "@daiict.ac.in", 
+            student_name_list
+        ))
+
+    random_email_files = [
+        f'email-{i}.txt' for i in random.sample(range(1, 21), 15)
+    ]
+
+    emails(student_name_list, random_email_files)
+
+
 def emails_with_modifications():
     files = list(filter(lambda string: True if string.startswith('email') else False, os.listdir())) 
     files = set(i for i in range(1,21)).difference(set(int(email.split('-')[1].split('.')[0]) for email in files))
 
-    for file in files:
-        with open(f'email-{file}.txt', 'w'):
-            
+    email_file_list = [f'email-{file}.txt' for file in files]
+    
+    student_name_list = ['name1@gmail.com', 'A_X_y@yahoo.co.in', 'nm123@rediff.com', 'nam_4_e@160.com']
+
+    emails(student_name_list, email_file_list)
+
 emails_with_modifications()
