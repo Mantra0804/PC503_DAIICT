@@ -45,10 +45,10 @@ def details_about_DAIICT():
         history_r = lines[history['start']:history['end']+1]
         write_file('History.txt', history_r)
 
-        environment_r = lines[environment['start']:environment['end']]
+        environment_r = lines[environment['start']:environment['end']+1]
         write_file('Environment.txt', environment_r)
         
-        recognition_r = lines[recognition['start']:recognition['end']]
+        recognition_r = lines[recognition['start']:recognition['end']+1]
         write_file('Recognition.txt', recognition_r)
 
         accreditation_r = lines[accreditation['start']:]
