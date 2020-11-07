@@ -1,7 +1,14 @@
 import random
 import os
+from randomtimestamp import randomtimestamp
 
-random.seed(53)
+def random_time():
+    timestamp=randomtimestamp(2010,text=False)
+    month = timestamp.strftime("%B") 
+    year = timestamp.strftime("%Y")
+    date = int(timestamp.strftime("%d"))     
+    time = timestamp.strftime("%H")+":"+timestamp.strftime("%M")
+    return str("Recieved at "+time+" hrs on "+month+" "+str(date)+", "+year+" from ")
 
 def write_file(file_name, content):
     with open(file_name, 'w') as op:
@@ -78,7 +85,7 @@ def emails(student_name_list, random_email_files, content):
             acc_s = random.choice(accreditation)
 
             remail.writelines([
-                    f'Recieved at 17:23 hrs on October 7, 2018 from {random.choice(student_name_list)}\n',
+                    f'{random_time()}{random.choice(student_name_list)}\n',
                     '\n',
                     history_s,
                     env_s,
@@ -174,11 +181,12 @@ def email_with_another_modifications(content, files):
     content_l['history'] = filter_data(history_constraint, content_l['history'])
 
     emails(student_name_list, email_file_list, content_l)
-
-
+    return email_file_list
 
 content = details_about_DAIICT()
 random_email_files = emails_original(content)
 random_email_files = emails_with_modifications(content, random_email_files) + random_email_files
-email_with_another_modifications(content, random_email_files)
+random_email_files = email_with_another_modifications(content, random_email_files) + random_email_files
+
+
 
