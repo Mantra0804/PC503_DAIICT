@@ -2,27 +2,13 @@ import random
 import os
 from randomtimestamp import randomtimestamp
 
-random.seed(54)
-
 def random_time():
-    timestamp=randomtimestamp(2010)
-    months = {	'01':'Janauary',
-            '02':'February',
-            '03':'March',
-            '04':'April',
-            '05':'May',
-            '06':'June',
-            '07':'July',
-            '08':'August',
-            '09':'September',
-            '10':'October',
-            '11':'November',
-            '12':'December'		}
-    month = months[timestamp.split()[0].split('-')[1]] 
-    year = timestamp.split()[0].split('-')[2]   
-    date = int(timestamp.split()[0].split('-')[0])     
-    time = timestamp.split()[1].split(':')[0]+":"+timestamp.split()[1].split(':')[1]
-    
+    timestamp=randomtimestamp(2010,text=False)
+    timestamp=randomtimestamp(2010,text=False)
+    month = timestamp.strftime("%B") 
+    year = timestamp.strftime("%Y")
+    date = int(timestamp.strftime("%d"))     
+    time = timestamp.strftime("%H")+":"+timestamp.strftime("%M")
     return str("Recieved at "+time+" hrs on "+month+" "+str(date)+", "+year+" from ")
 
 def write_file(file_name, content):
