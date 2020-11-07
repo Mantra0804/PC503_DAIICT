@@ -4,7 +4,6 @@ from randomtimestamp import randomtimestamp
 
 def random_time():
     timestamp=randomtimestamp(2010,text=False)
-    timestamp=randomtimestamp(2010,text=False)
     month = timestamp.strftime("%B") 
     year = timestamp.strftime("%Y")
     date = int(timestamp.strftime("%d"))     
