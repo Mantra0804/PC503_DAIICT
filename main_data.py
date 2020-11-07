@@ -198,46 +198,10 @@ def email_with_another_modifications(content, files):
     emails(student_name_list, email_file_list, content_l)
     return email_file_list
 
-def emails_without_wave_information(random_email_files):
-    spam_emails = {}
-    for email in random_email_files:
-        with open(email, 'r') as s:
-            lines = s.readlines()
-            if lines[2].find("wave") == -1:
-                spam_emails[email]=lines[0].split()[-1]
-    return spam_emails
-
-def emails_without_daiictid(random_email_files):
-    spam_emails = {}
-    for email in random_email_files:
-        with open(email, 'r') as s:
-            lines = s.readlines()
-            if lines[0].split()[-1].find("daiict.ac.in") == -1:
-                spam_emails[email]=lines[0].split()[-1]
-    return spam_emails
-
-def rename_files(spam_emails):
-    i=1
-    for email in spam_emails:
-        with open(email,'r+') as s:
-            content = s.read()
-            s.seek(0)
-            s.write("This email has been categorized as spam\n"+content)
-        os.rename(email,"spam"+str(i)+".txt")    
-        i += 1
-
 content = details_about_DAIICT()
 random_email_files = emails_original(content)
 random_email_files = emails_with_modifications(content, random_email_files) + random_email_files
 random_email_files = email_with_another_modifications(content, random_email_files) + random_email_files
-spam_emails = emails_without_wave_information(random_email_files)
-
-print ("Emails that not contain wave information are :")
-for email in spam_emails:
-    print (spam_emails[email])
-
-spam_emails.update(emails_without_daiictid(random_email_files))
-rename_files(spam_emails)
 
 
 
