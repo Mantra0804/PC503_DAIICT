@@ -2,6 +2,8 @@ import random
 import os
 from randomtimestamp import randomtimestamp
 
+random.seed(53)
+
 def random_time():
     timestamp=randomtimestamp(2010,text=False)
     month = timestamp.strftime("%B") 
