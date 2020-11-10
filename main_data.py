@@ -4,6 +4,12 @@ from randomtimestamp import randomtimestamp
 
 random.seed(53)
 
+def initial_cleanup():
+    to_be_kept = ['.git', '.gitignore', 'About-DAIICT.txt', 'main_data.py', 'main_test.py',  'readme.md', 'student_names_list.txt']
+    to_be_deleted = set(os.listdir()).difference(to_be_kept)
+    for file in to_be_deleted:
+        os.remove(file)
+    
 def random_time():
     timestamp=randomtimestamp(2010,text=False)
     month = timestamp.strftime("%B") 
@@ -185,6 +191,7 @@ def email_with_another_modifications(content, files):
     emails(student_name_list, email_file_list, content_l)
     return email_file_list
 
+initial_cleanup()
 content = details_about_DAIICT()
 random_email_files = emails_original(content)
 random_email_files = emails_with_modifications(content, random_email_files) + random_email_files
