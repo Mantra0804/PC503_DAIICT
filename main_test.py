@@ -53,25 +53,84 @@ def time_to_timestamp(t_d):
 
     return datetime(year, month, day, hr, minute, 0, 0) 
 
+def gen_timestamp_name_dict(to_be_written, line):
+    content = line.split()
+    t_d, name = time_to_timestamp(content[2:8]), content[-1]
+    if to_be_written.get(t_d):
+        to_be_written[t_d].append(name)
+    else:
+        to_be_written[t_d] = [name.split('@')[0].replace("_", " ")]
+
+# trial function - to remove redundant names mapped on different timestamps - can be optimized
+def get_unique_dict(to_be_written):
+    reverse_dict = dict()
+    to_be_returned = dict()
+    for k, v in to_be_written.items():
+        for name in v:
+            if reverse_dict.get(name):
+                reverse_dict[name].append(k)
+            else:
+                reverse_dict[name] = [k]
+
+    for k, v in reverse_dict.items():
+        reverse_dict[k]= sorted(v)[-1]
+    
+    for k,v in reverse_dict.items():
+        if to_be_returned.get(v):
+            to_be_returned[v].append(k)
+        else:
+            to_be_returned[v] = [k]
+
+    return to_be_returned
+
+
+
+def write_ordered_dict(file, to_be_written, asc):
+    if asc:
+        Ordered = OrderedDict(sorted(to_be_written.items()))
+    else:
+        Ordered = OrderedDict(reversed(sorted(to_be_written.items())))
+    
+    with open(file, 'w') as ord:
+        for k,v in Ordered.items():
+            for name in v:
+                ord.write(str(k)  + " " + name + "\n")    
+
+
 def generate_ordered_names(lst):
     to_be_written = dict()
     for file in lst:
         with open(file, 'r') as fl:
             line = fl.readline()
-            content = line.split()
-            t_d, name = time_to_timestamp(content[2:8]), content[-1]
+            gen_timestamp_name_dict(to_be_written, line)
 
-            if to_be_written.get(t_d):
-                to_be_written[t_d].append(name)
-            else:
-                to_be_written[t_d] = [name]
+    write_ordered_dict('Ordered_names.txt', to_be_written, True)
 
-    Ordered = OrderedDict(sorted(to_be_written.items()))
-    with open('Ordered_names.txt', 'w') as ord:
-        for k,v in Ordered.items():
-            for name in v:
-                ord.write(str(k)  + " " + name + "\n")
             
+def generate_ordered_names_wave(lst):
+    to_be_written_f1 = dict()
+    to_be_written_f2 = dict()
+    to_be_written_f3 = dict()
+    to_be_written_f4 = dict()
+    for file in lst:
+        with open(file, 'r') as f1:
+            line = f1.readline()
+            content = f1.read()
+            if content.find("first wave") != -1:
+                gen_timestamp_name_dict(to_be_written_f1, line)
+            elif content.find("second wave") != -1:
+                gen_timestamp_name_dict(to_be_written_f2, line)
+            elif content.find("third wave") != -1:
+                gen_timestamp_name_dict(to_be_written_f3, line)
+            elif content.find("fourth wave") != -1:
+                gen_timestamp_name_dict(to_be_written_f4, line)
+
+
+    write_ordered_dict("ordered_names_wave1.txt", get_unique_dict(to_be_written_f1), False)
+    write_ordered_dict("ordered_names_wave2.txt", get_unique_dict(to_be_written_f2), False)
+    write_ordered_dict("ordered_names_wave3.txt", get_unique_dict(to_be_written_f3), False)
+    write_ordered_dict("ordered_names_wave4.txt", get_unique_dict(to_be_written_f4), False)
+
 
 email_files = [f'email-{i}.txt' for i in range(1,21)]
 spam_emails = emails_without_wave_information(email_files)
@@ -86,4 +145,4 @@ non_spam_emails = list(set(email_files).difference(set(spam_emails.keys())))
 print('Non spam:', non_spam_emails)
 
 generate_ordered_names(non_spam_emails)
-
+generate_ordered_names_wave(non_spam_emails)
