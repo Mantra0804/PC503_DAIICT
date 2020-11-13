@@ -146,14 +146,18 @@ def construct_BarPlot(ordered_names_wave1, ordered_names_wave2, ordered_names_wa
     number_of_wave4 = len(ordered_names_wave4)
     number_of_spam = len(spam_emails)
 
-    x = ['# of 1st wave', '#of 2nd wave', '# of 3rd wave', '# of 4th wave', 'Spam mails']
+    x = ['1st wave', '2nd wave', '3rd wave', '4th wave', 'Spam mails']
     y = [number_of_wave1, number_of_wave2, number_of_wave3, number_of_wave4, number_of_spam]
 
     xpos = np.arange(len(x))
 
     plt.bar(xpos,y)
     plt.xticks(xpos,x)
+    plt.xlabel('Students category containing')
+    plt.ylabel('Number of students')
+    plt.title('Category vs Number of students')
     plt.show()
+    plt.savefig('BarPlot.png')
 
 email_files = [f'email-{i}.txt' for i in range(1,21)]
 spam_emails = emails_without_wave_information(email_files)
