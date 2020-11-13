@@ -196,6 +196,3 @@ content = details_about_DAIICT()
 random_email_files = emails_original(content)
 random_email_files = emails_with_modifications(content, random_email_files) + random_email_files
 random_email_files = email_with_another_modifications(content, random_email_files) + random_email_files
-
-
-
