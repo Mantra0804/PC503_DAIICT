@@ -1,6 +1,8 @@
 import os
 from datetime import datetime
 from collections import OrderedDict
+import matplotlib.pyplot as plt
+import numpy as np
 
 def emails_without_wave_information(email_files):
     spam_emails = {}
@@ -125,12 +127,37 @@ def generate_ordered_names_wave(lst):
             elif content.find("fourth wave") != -1:
                 gen_timestamp_name_dict(to_be_written_f4, line)
 
+    ordered_names_wave1 = get_unique_dict(to_be_written_f1)
+    ordered_names_wave2 = get_unique_dict(to_be_written_f2)
+    ordered_names_wave3 = get_unique_dict(to_be_written_f3)
+    ordered_names_wave4 = get_unique_dict(to_be_written_f4)
 
     write_ordered_dict("ordered_names_wave1.txt", get_unique_dict(to_be_written_f1), False)
     write_ordered_dict("ordered_names_wave2.txt", get_unique_dict(to_be_written_f2), False)
     write_ordered_dict("ordered_names_wave3.txt", get_unique_dict(to_be_written_f3), False)
     write_ordered_dict("ordered_names_wave4.txt", get_unique_dict(to_be_written_f4), False)
 
+    return ordered_names_wave1, ordered_names_wave2, ordered_names_wave3, ordered_names_wave4
+
+def construct_BarPlot(ordered_names_wave1, ordered_names_wave2, ordered_names_wave3, ordered_names_wave4, spam_emails):
+    number_of_wave1 = len(ordered_names_wave1)
+    number_of_wave2 = len(ordered_names_wave2)
+    number_of_wave3 = len(ordered_names_wave3)
+    number_of_wave4 = len(ordered_names_wave4)
+    number_of_spam = len(spam_emails)
+
+    x = ['1st wave', '2nd wave', '3rd wave', '4th wave', 'Spam mails']
+    y = [number_of_wave1, number_of_wave2, number_of_wave3, number_of_wave4, number_of_spam]
+
+    xpos = np.arange(len(x))
+
+    plt.bar(xpos,y)
+    plt.xticks(xpos,x)
+    plt.xlabel('Students category containing')
+    plt.ylabel('Number of students')
+    plt.title('Category vs Number of students')
+    plt.show()
+    plt.savefig('BarPlot.png')
 
 email_files = [f'email-{i}.txt' for i in range(1,21)]
 spam_emails = emails_without_wave_information(email_files)
@@ -145,4 +172,6 @@ non_spam_emails = list(set(email_files).difference(set(spam_emails.keys())))
 print('Non spam:', non_spam_emails)
 
 generate_ordered_names(non_spam_emails)
-generate_ordered_names_wave(non_spam_emails)
+ordered_names_wave1, ordered_names_wave2, ordered_names_wave3, ordered_names_wave4 = generate_ordered_names_wave(non_spam_emails)
+
+construct_BarPlot(ordered_names_wave1, ordered_names_wave2, ordered_names_wave3, ordered_names_wave4, spam_emails)
