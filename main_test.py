@@ -160,10 +160,14 @@ def construct_BarPlot(ordered_names_wave1, ordered_names_wave2, ordered_names_wa
     plt.savefig('BarPlot.png')
 
 email_files = [f'email-{i}.txt' for i in range(1,21)]
+
+# TASK 9 - emails_without_wave_info => returns those files
 spam_emails = emails_without_wave_information(email_files)
 print ("Emails that not contain wave information are :")
 for email in spam_emails:
   print (spam_emails[email])
+
+#TASK 10 - emails_without_daiictid -> rename_files => update  spam with non-DA id, rename files
 spam_emails.update(emails_without_daiictid(email_files))
 print('Spam:', spam_emails.keys())
 rename_files(spam_emails)
@@ -171,7 +175,11 @@ rename_files(spam_emails)
 non_spam_emails = list(set(email_files).difference(set(spam_emails.keys())))
 print('Non spam:', non_spam_emails)
 
+#TASK 11 - gen_ordered_names -> gen_timestamp -> time_2_timestamp => create ordered_names.txt
 generate_ordered_names(non_spam_emails)
+
+# TASK 12 - gen_ordered_names_wave -> (gen_timestamp -> time2timestamp) -> get_unique_dict => 4 files created
 ordered_names_wave1, ordered_names_wave2, ordered_names_wave3, ordered_names_wave4 = generate_ordered_names_wave(non_spam_emails)
 
+#TASK 13 - construct_barplot
 construct_BarPlot(ordered_names_wave1, ordered_names_wave2, ordered_names_wave3, ordered_names_wave4, spam_emails)
