@@ -159,6 +159,7 @@ def construct_BarPlot(ordered_names_wave1, ordered_names_wave2, ordered_names_wa
     plt.show()
     plt.savefig('BarPlot.png')
 
+
 email_files = [f'email-{i}.txt' for i in range(1,21)]
 spam_emails = emails_without_wave_information(email_files)
 print ("Emails that not contain wave information are :")
