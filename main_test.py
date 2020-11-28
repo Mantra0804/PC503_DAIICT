@@ -156,8 +156,9 @@ def construct_BarPlot(ordered_names_wave1, ordered_names_wave2, ordered_names_wa
     plt.xlabel('Students category containing')
     plt.ylabel('Number of students')
     plt.title('Category vs Number of students')
-    plt.show()
     plt.savefig('BarPlot.png')
+    plt.show()
+    
 
 
 email_files = [f'email-{i}.txt' for i in range(1,21)]
