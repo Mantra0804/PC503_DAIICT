@@ -2,7 +2,7 @@ import random
 import os
 from randomtimestamp import randomtimestamp
 
-random.seed(53)
+# random.seed(53)
 
 def initial_cleanup():
     to_be_kept = ['.git', '.gitignore', 'About-DAIICT.txt', 'main_data.py', 'main_test.py',  'readme.md', 'student_names_list.txt']
@@ -192,7 +192,14 @@ def email_with_another_modifications(content, files):
     return email_file_list
 
 initial_cleanup()
+# TASK 3 => returns {4 diff sections : content}, takes about_daiict file
 content = details_about_DAIICT()
+
+#TASK 5 - emails_original -> filter_data() -> emails() => return email files
 random_email_files = emails_original(content)
+
+# TASK 6 - emails_with_modification() -> filter_data() -> emails => return those 4 files
 random_email_files = emails_with_modifications(content, random_email_files) + random_email_files
+
+#TASK 7 - emails_with_another_modification -> filter_data -> emails => return that 1 file
 random_email_files = email_with_another_modifications(content, random_email_files) + random_email_files
